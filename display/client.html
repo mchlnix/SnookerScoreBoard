@@ -32,8 +32,9 @@
             var ws = new WebSocket("ws://127.0.0.1:8000/")
 
             ws.onmessage = function (event) {
-                player1 = JSON.parse(event.data);
-                document.getElementById("score").innerHTML = player1.score;
+                game = JSON.parse(event.data);
+
+                document.getElementById("score").innerHTML = game.player1.score + ":" + game.player2.score;
             };
         </script>
 

@@ -1,6 +1,6 @@
 import asyncio
 from dataclasses import dataclass
-from json import loads, dumps
+from json import loads, dumps, JSONEncoder
 from socket import socket, AF_INET, SOCK_STREAM as TCP
 from typing import Tuple
 
@@ -12,6 +12,20 @@ class Player:
     name: str = ""
     score: int = 0
     is_playing: bool = False
+
+
+@dataclass
+class Game:
+    player1: Player
+    player2: Player
+
+
+class PlayerEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Player):
+            return obj.__dict__
+        # Let the base class default method raise the TypeError
+        return JSONEncoder.default(self, obj)
 
 
 def open_socket(address: Tuple[str, int]):
@@ -43,7 +57,7 @@ async def recv_player(reader):
 
 
 async def main(websocket, _):
-    await websocket.send(dumps(PLAYER_1.__dict__))
+    await websocket.send(dumps(GAME_STATE.__dict__, cls=PlayerEncoder))
 
 
 if __name__ == "__main__":
@@ -52,8 +66,7 @@ if __name__ == "__main__":
 
     #from_app = open_socket(app_address)
 
-    PLAYER_1 = Player()
-    PLAYER_2 = Player()
+    GAME_STATE = Game(Player("Ronnie"), Player("John"))
 
     start_server = websockets.serve(main, '127.0.0.1', 8000)
 

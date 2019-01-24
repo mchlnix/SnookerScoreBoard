@@ -60,6 +60,37 @@ async def main(websocket, _):
     await websocket.send(dumps(GAME_STATE.__dict__, cls=PlayerEncoder))
 
 
+async def handle_echo(reader, writer):
+    data = await reader.read(100)
+    message = data.decode()
+    addr = writer.get_extra_info('peername')
+
+    print(f"Received {message!r} from {addr!r}")
+
+    print(f"Send: {message!r}")
+    writer.write(data)
+    await writer.drain()
+
+    print("Close the connection")
+    writer.close()
+
+
+async def main2():
+    server = await asyncio.start_server(
+        handle_echo, '127.0.0.1', 8888)
+
+    addr = server.sockets[0].getsockname()
+    print(f'Serving on {addr}')
+
+    async with server:
+        await server.serve_forever()
+
+
+async def start_ws_server():
+    print("ws server")
+    await websockets.serve(main, '127.0.0.1', 8000)
+
+
 if __name__ == "__main__":
     app_address = ("192.168.2.112", 40000)
     ws_address = "ws://localhost:8000"
@@ -68,7 +99,8 @@ if __name__ == "__main__":
 
     GAME_STATE = Game(Player("Ronnie O'Sullivan", 45), Player("John Higgins", 23))
 
-    start_server = websockets.serve(main, '127.0.0.1', 8000)
+    loop = asyncio.get_event_loop()
 
-    asyncio.get_event_loop().run_until_complete(start_server)
-    asyncio.get_event_loop().run_forever()
+    loop.create_task(main2())
+    loop.create_task(start_ws_server())
+    loop.run_forever()

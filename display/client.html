@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Snooker Scoreboard</title>
+        <style>
+            body {
+                background-image: linear-gradient(#3ab503, #0a6c03);
+                background-repeat: no-repeat;
+                height: 100vh;
+                margin: 0px;
+            }
+            #scoreboard {
+                text-align: center;
+            }
+            #score {
+                margin: auto;
+
+                font-size: 50pt;
+                font-weight: bold;
+                font-family: sans;
+                color: white;
+
+                display: inline-block;
+            }
+            ul {
+                margin: 0px;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            var ws = new WebSocket("ws://127.0.0.1:8000/")
+
+            ws.onmessage = function (event) {
+                player1 = JSON.parse(event.data);
+                document.getElementById("score").innerHTML = player1.score;
+            };
+        </script>
+
+        <div id="scoreboard">
+            <div id="score"></div>
+        </div>
+    </body>
+</html>

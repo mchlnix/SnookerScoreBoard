@@ -64,9 +64,9 @@ if __name__ == "__main__":
     app_address = ("192.168.2.112", 40000)
     ws_address = "ws://localhost:8000"
 
-    #from_app = open_socket(app_address)
+    # from_app = open_socket(app_address)
 
-    GAME_STATE = Game(Player("Ronnie"), Player("John"))
+    GAME_STATE = Game(Player("Ronnie O'Sullivan", 45), Player("John Higgins", 23))
 
     start_server = websockets.serve(main, '127.0.0.1', 8000)
 

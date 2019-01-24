@@ -13,8 +13,6 @@
                 text-align: center;
             }
             #score {
-                margin: auto;
-
                 font-size: 50pt;
                 font-weight: bold;
                 font-family: sans;
@@ -22,8 +20,21 @@
 
                 display: inline-block;
             }
-            ul {
-                margin: 0px;
+            #vs {
+                display: inline-block;
+            }
+            #players {
+                font-size: 30pt;
+                font-weight: bold;
+                font-family: sans;
+                color: black;
+            }
+            .player {
+                width: 30%;
+                display: inline-block;
+            }
+            .player_name {
+
             }
         </style>
     </head>
@@ -34,11 +45,24 @@
             ws.onmessage = function (event) {
                 game = JSON.parse(event.data);
 
+                document.getElementById("player1_name").innerHTML = game.player1.name;
+                document.getElementById("player2_name").innerHTML = game.player2.name;
                 document.getElementById("score").innerHTML = game.player1.score + ":" + game.player2.score;
             };
         </script>
 
         <div id="scoreboard">
+            <div id="players">
+                <div class="player">
+                    <img src="https://loremflickr.com//200/320/?iaoisa1" />
+                    <p id="player1_name" class="player_name"></p>
+                </div>
+                <p id="vs">vs.</p>
+                <div class="player">
+                    <img src="https://loremflickr.com//200/320/?anfini2" />
+                    <p id="player2_name" class="player_name"></p>
+                </div>
+            </div>
             <div id="score"></div>
         </div>
     </body>

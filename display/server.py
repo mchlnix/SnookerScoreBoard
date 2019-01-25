@@ -1,8 +1,7 @@
 import asyncio
 from dataclasses import dataclass
-from json import loads, dumps, JSONEncoder
-from socket import socket, AF_INET, SOCK_STREAM as TCP
-from typing import Tuple
+from json import loads, dumps, JSONEncoder, JSONDecoder
+from json.decoder import WHITESPACE
 
 import websockets as websockets
 
@@ -20,62 +19,41 @@ class Game:
     player2: Player
 
 
-class PlayerEncoder(JSONEncoder):
+class GameEncoder(JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, Player):
+        if isinstance(obj, (Game, Player)):
             return obj.__dict__
-        # Let the base class default method raise the TypeError
+
         return JSONEncoder.default(self, obj)
 
 
-def open_socket(address: Tuple[str, int]):
-    sock = socket(AF_INET, TCP)
-    sock.bind(address)
-    sock.listen(1)
+class GameDecoder(JSONDecoder):
+    def decode(self, s, _w=WHITESPACE.match):
+        inner_dict = super().decode(s, _w)
 
-    connection, _ = sock.accept()
+        game = Game(Player(), Player())
+        game.player1.__dict__ = inner_dict["player1"]
+        game.player2.__dict__ = inner_dict["player2"]
 
-    return connection
-
-
-async def get_data_from_app(reader, _):
-    player1 = await recv_player(reader)
-    player2 = await recv_player(reader)
-
-
-async def recv_player(reader):
-    byte_buffer = reader.read(4)
-
-    data_size = int.from_bytes(byte_buffer, "big")
-
-    json_data: bytes = reader.read(data_size)
-
-    template = Player()
-    template.__dict__ = loads(json_data.decode("utf-8"))
-
-    return template
+        return game
 
 
 async def main(websocket, _):
-    await websocket.send(dumps(GAME_STATE.__dict__, cls=PlayerEncoder))
+    await websocket.send(dumps(GAME_STATE, cls=GameEncoder))
 
 
-async def handle_echo(reader, writer):
-    data = await reader.read(100)
-    message = data.decode()
-    addr = writer.get_extra_info('peername')
+async def handle_echo(reader, _):
+    global GAME_STATE
+    byte_buffer = await reader.read(4)
 
-    print(f"Received {message!r} from {addr!r}")
+    data_size = int.from_bytes(byte_buffer, "big")
 
-    print(f"Send: {message!r}")
-    writer.write(data)
-    await writer.drain()
+    json_data: bytes = await reader.read(data_size)
 
-    print("Close the connection")
-    writer.close()
+    GAME_STATE = loads(json_data.decode())
 
 
-async def main2():
+async def start_tcp_server():
     server = await asyncio.start_server(
         handle_echo, '127.0.0.1', 8888)
 
@@ -101,6 +79,6 @@ if __name__ == "__main__":
 
     loop = asyncio.get_event_loop()
 
-    loop.create_task(main2())
+    loop.create_task(start_tcp_server())
     loop.create_task(start_ws_server())
     loop.run_forever()

@@ -39,23 +39,33 @@ class GameDecoder(JSONDecoder):
 
 
 async def main(websocket, _):
-    await websocket.send(dumps(GAME_STATE, cls=GameEncoder))
+    global STATE_DIRTY
+
+    while True:
+        if STATE_DIRTY:
+            await websocket.send(dumps(GAME_STATE, cls=GameEncoder))
+            STATE_DIRTY = False
+        await asyncio.sleep(1)
 
 
 async def handle_echo(reader, _):
-    global GAME_STATE
-    byte_buffer = await reader.read(4)
+    global GAME_STATE, STATE_DIRTY
+    while True:
+        print("Received stuff")
+        byte_buffer = await reader.read(4)
 
-    data_size = int.from_bytes(byte_buffer, "big")
+        data_size = int.from_bytes(byte_buffer, "big")
 
-    json_data: bytes = await reader.read(data_size)
+        json_data: bytes = await reader.read(data_size)
 
-    GAME_STATE = loads(json_data.decode())
+        GAME_STATE = loads(json_data.decode())
+
+        STATE_DIRTY = True
 
 
 async def start_tcp_server():
     server = await asyncio.start_server(
-        handle_echo, '127.0.0.1', 8888)
+        handle_echo, '192.168.2.112', 8888)
 
     addr = server.sockets[0].getsockname()
     print(f'Serving on {addr}')
@@ -76,6 +86,7 @@ if __name__ == "__main__":
     # from_app = open_socket(app_address)
 
     GAME_STATE = Game(Player("Ronnie O'Sullivan", 45), Player("John Higgins", 23))
+    STATE_DIRTY = True
 
     loop = asyncio.get_event_loop()
 

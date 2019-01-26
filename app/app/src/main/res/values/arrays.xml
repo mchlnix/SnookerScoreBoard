@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="player_names">
+        <item>Ronnie O\'Sullivan</item>
+        <item>John Higgins</item>
+        <item>Mark Selby</item>
+        <item>Stephen Hendry</item>
+    </string-array>
+</resources>

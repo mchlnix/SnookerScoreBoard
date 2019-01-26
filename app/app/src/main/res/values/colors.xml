@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="ballRed">#D50000</color>
+    <color name="ballYellow">#FFEA00</color>
+    <color name="ballGreen">#388E3C</color>
+    <color name="ballBrown">#653E1D</color>
+    <color name="ballBlue">#311B92</color>
+    <color name="ballPink">#E200D7</color>
+    <color name="ballBlack">#000000</color>
 </resources>

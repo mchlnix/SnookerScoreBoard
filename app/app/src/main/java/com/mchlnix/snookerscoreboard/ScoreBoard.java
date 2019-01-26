@@ -3,7 +3,8 @@ package com.mchlnix.snookerscoreboard;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.View;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 
 import java.io.IOException;
@@ -16,6 +17,18 @@ public class ScoreBoard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_board);
+
+        NumberPicker numberPicker = findViewById(R.id.score_picker1);
+
+        numberPicker.setMinValue(0);
+        numberPicker.setValue(0);
+        numberPicker.setMaxValue(147);
+
+        numberPicker = findViewById(R.id.score_picker2);
+
+        numberPicker.setMinValue(0);
+        numberPicker.setValue(0);
+        numberPicker.setMaxValue(147);
 
         Thread thread = new Thread(new GameStateUpdater(), "Gamestate update thread");
 
@@ -30,8 +43,11 @@ public class ScoreBoard extends AppCompatActivity {
         String player1 = spinner_player1.getSelectedItem().toString();
         String player2 = spinner_player2.getSelectedItem().toString();
 
-        int points1 = (int) (Math.random() * 148);
-        int points2 = (int) (Math.random() * 148);
+        NumberPicker score_picker1 = findViewById(R.id.score_picker1);
+        NumberPicker score_picker2 = findViewById(R.id.score_picker2);
+
+        int points1 = score_picker1.getValue();
+        int points2 = score_picker2.getValue();
 
         return "{\"player1\": {\"name\": \"" + player1 + "\", \"score\": " + points1 + ", \"is_playing\": false}, \"player2\": {\"name\": \"" + player2 + "\", \"score\": " + points2 + ",  \"is_playing\": false}}";
     }
@@ -54,14 +70,14 @@ public class ScoreBoard extends AppCompatActivity {
 
                         socket.getOutputStream().write(payload.array());
 
-                        Log.d("THREAD", "run: Hi");
-
-                        Thread.sleep(1000);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            break;
+                        }
                     }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

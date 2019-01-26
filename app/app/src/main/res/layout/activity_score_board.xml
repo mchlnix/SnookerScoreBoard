@@ -50,4 +50,162 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
+    <NumberPicker
+        android:id="@+id/score_picker1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/spinner_player1"
+        app:layout_constraintHorizontal_bias="0.42"
+        app:layout_constraintStart_toStartOf="@+id/spinner_player1"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_player1" />
+
+    <NumberPicker
+        android:id="@+id/score_picker2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/spinner_player2"
+        app:layout_constraintStart_toStartOf="@+id/spinner_player2"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_player2" />
+
+    <ImageButton
+        android:id="@+id/greenBall"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@null"
+        android:onClick="scoreBall"
+        android:tint="@color/ballGreen"
+        app:layout_constraintEnd_toStartOf="@+id/brownBall"
+        app:layout_constraintStart_toEndOf="@+id/yellowBall"
+        app:layout_constraintTop_toBottomOf="@+id/score_picker2"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageButton
+        android:id="@+id/brownBall"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@null"
+        android:onClick="scoreBall"
+        android:tint="@color/ballBrown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/greenBall"
+        app:layout_constraintTop_toBottomOf="@+id/score_picker2"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageButton
+        android:id="@+id/yellowBall"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@null"
+        android:onClick="scoreBall"
+        android:tint="@color/ballYellow"
+        app:layout_constraintEnd_toStartOf="@+id/greenBall"
+        app:layout_constraintStart_toEndOf="@+id/redBall"
+        app:layout_constraintTop_toBottomOf="@+id/score_picker1"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageButton
+        android:id="@+id/redBall"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@null"
+        android:onClick="scoreBall"
+        android:tint="@color/ballRed"
+        app:layout_constraintEnd_toStartOf="@+id/yellowBall"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/score_picker1"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageButton
+        android:id="@+id/blackBall"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@null"
+        android:onClick="scoreBall"
+        android:tint="@color/ballBlack"
+        app:layout_constraintEnd_toStartOf="@+id/whiteBall"
+        app:layout_constraintStart_toEndOf="@+id/pinkBall"
+        app:layout_constraintTop_toBottomOf="@+id/greenBall"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageButton
+        android:id="@+id/whiteBall"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@null"
+        android:onClick="scoreBall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/blackBall"
+        app:layout_constraintTop_toBottomOf="@+id/brownBall"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageButton
+        android:id="@+id/pinkBall"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@null"
+        android:onClick="scoreBall"
+        android:tint="@color/ballPink"
+        app:layout_constraintEnd_toStartOf="@+id/blackBall"
+        app:layout_constraintStart_toEndOf="@+id/blueBall"
+        app:layout_constraintTop_toBottomOf="@+id/yellowBall"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageButton
+        android:id="@+id/blueBall"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@null"
+        android:onClick="scoreBall"
+        android:tint="@color/ballBlue"
+        app:layout_constraintEnd_toStartOf="@+id/pinkBall"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/redBall"
+        app:srcCompat="@drawable/circle" />
+
 </android.support.constraint.ConstraintLayout>

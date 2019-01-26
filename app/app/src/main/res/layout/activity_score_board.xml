@@ -7,7 +7,7 @@
     tools:context=".ScoreBoard">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/avatar_player1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -17,16 +17,17 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="17dp"
         android:adjustViewBounds="true"
+        android:onClick="setCurrentPlayer"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toTopOf="@+id/spinner_player1"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintEnd_toStartOf="@+id/avatar_player2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/avatar_gray"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/avatar_player2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -36,10 +37,11 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="17dp"
         android:adjustViewBounds="true"
+        android:onClick="setCurrentPlayer"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toTopOf="@+id/spinner_player2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/avatar_player1"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/avatar_gray"
         tools:srcCompat="@tools:sample/avatars" />
@@ -53,7 +55,7 @@
         android:layout_marginTop="17dp"
         android:entries="@array/player_names"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/avatar_player1" />
 
     <Spinner
         android:id="@+id/spinner_player2"
@@ -64,7 +66,7 @@
         android:layout_marginRight="8dp"
         android:entries="@array/player_names"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/avatar_player2" />
 
     <NumberPicker
         android:id="@+id/score_picker1"

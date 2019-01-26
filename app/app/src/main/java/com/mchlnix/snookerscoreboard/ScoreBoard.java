@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
@@ -16,6 +17,10 @@ import java.nio.charset.StandardCharsets;
 
 public class ScoreBoard extends AppCompatActivity {
     boolean foulMode = false;
+    int player1 = R.id.avatar_player1;
+    int player2 = R.id.avatar_player2;
+
+    int currentPlayer = player1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +144,7 @@ public class ScoreBoard extends AppCompatActivity {
         this.setFoulMode(! this.foulMode);
     }
 
-    public void setFoulMode(boolean state)
+    private void setFoulMode(boolean state)
     {
         this.foulMode = state;
 
@@ -153,5 +158,28 @@ public class ScoreBoard extends AppCompatActivity {
         {
             whiteBall.setColorFilter(Color.argb(0x00, 0x00, 0x00, 0x00));
         }
+    }
+
+    public void setCurrentPlayer(View v)
+    {
+        unhighlightPlayer(currentPlayer);
+
+        this.currentPlayer = v.getId();
+
+        highlightPlayer(currentPlayer);
+    }
+
+    private void highlightPlayer(int id)
+    {
+        ImageView avatar = findViewById(currentPlayer);
+
+        avatar.setColorFilter(Color.argb(0x40, 0x00, 0x80, 0xFF));
+    }
+
+    private void unhighlightPlayer(int id)
+    {
+        ImageView avatar = findViewById(id);
+
+        avatar.setColorFilter(Color.argb(0x00, 0x00, 0x00, 0x00));
     }
 }

@@ -82,4 +82,48 @@ public class ScoreBoard extends AppCompatActivity {
             }
         }
     }
+
+    public void scoreBall(View v)
+    {
+        NumberPicker score = findViewById(R.id.score_picker1);
+
+        int points = 0;
+
+        switch(v.getId())
+        {
+            case R.id.redBall:
+                points = 1;
+                break;
+
+            case R.id.yellowBall:
+                points = 2;
+                break;
+
+            case R.id.greenBall:
+                points = 3;
+                break;
+
+            case R.id.brownBall:
+                points = 4;
+                break;
+
+            case R.id.blueBall:
+                points = 5;
+                break;
+
+            case R.id.pinkBall:
+                points = 6;
+                break;
+
+            case R.id.blackBall:
+                points = 7;
+                break;
+
+            case R.id.whiteBall:
+                points = 4;
+                break;
+        }
+
+        score.setValue(score.getValue() + points);
+    }
 }

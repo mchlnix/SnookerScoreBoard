@@ -1,9 +1,11 @@
 package com.mchlnix.snookerscoreboard;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
@@ -13,6 +15,8 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 public class ScoreBoard extends AppCompatActivity {
+    boolean foulMode = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +89,14 @@ public class ScoreBoard extends AppCompatActivity {
 
     public void scoreBall(View v)
     {
-        NumberPicker score = findViewById(R.id.score_picker1);
+        NumberPicker score;
+
+        if (this.foulMode)
+            score = findViewById(R.id.score_picker2);
+        else
+            score = findViewById(R.id.score_picker1);
+
+        this.setFoulMode(false);
 
         int points = 0;
 
@@ -118,12 +129,29 @@ public class ScoreBoard extends AppCompatActivity {
             case R.id.blackBall:
                 points = 7;
                 break;
-
-            case R.id.whiteBall:
-                points = 4;
-                break;
         }
 
         score.setValue(score.getValue() + points);
+    }
+
+    public void whiteBall(View view)
+    {
+        this.setFoulMode(! this.foulMode);
+    }
+
+    public void setFoulMode(boolean state)
+    {
+        this.foulMode = state;
+
+        ImageButton whiteBall = findViewById(R.id.whiteBall);
+
+        if (this.foulMode)
+        {
+            whiteBall.setColorFilter(Color.argb(0x40, 0x00, 0x80, 0xFF));
+        }
+        else
+        {
+            whiteBall.setColorFilter(Color.argb(0x00, 0x00, 0x00, 0x00));
+        }
     }
 }

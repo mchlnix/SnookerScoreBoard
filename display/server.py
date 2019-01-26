@@ -41,7 +41,7 @@ class GameDecoder(JSONDecoder):
 async def main(websocket, _):
     global STATE_DIRTY
 
-    while True:
+    while not websocket.closed:
         if STATE_DIRTY:
             await websocket.send(dumps(GAME_STATE, cls=GameEncoder))
             STATE_DIRTY = False
@@ -50,9 +50,12 @@ async def main(websocket, _):
 
 async def handle_echo(reader, _):
     global GAME_STATE, STATE_DIRTY
-    while True:
-        print("Received stuff")
+
+    while reader:
         byte_buffer = await reader.read(4)
+
+        if len(byte_buffer) != 4:
+            break
 
         data_size = int.from_bytes(byte_buffer, "big")
 

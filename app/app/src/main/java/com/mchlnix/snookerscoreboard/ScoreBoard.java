@@ -52,8 +52,8 @@ public class ScoreBoard extends AppCompatActivity {
         Spinner spinner_player1 = findViewById(R.id.spinner_player1);
         Spinner spinner_player2 = findViewById(R.id.spinner_player2);
 
-        String player1 = spinner_player1.getSelectedItem().toString();
-        String player2 = spinner_player2.getSelectedItem().toString();
+        String player_name1 = spinner_player1.getSelectedItem().toString();
+        String player_name2 = spinner_player2.getSelectedItem().toString();
 
         NumberPicker score_picker1 = findViewById(R.id.score_picker1);
         NumberPicker score_picker2 = findViewById(R.id.score_picker2);
@@ -61,7 +61,7 @@ public class ScoreBoard extends AppCompatActivity {
         int points1 = score_picker1.getValue();
         int points2 = score_picker2.getValue();
 
-        return "{\"player1\": {\"name\": \"" + player1 + "\", \"score\": " + points1 + ", \"is_playing\": false}, \"player2\": {\"name\": \"" + player2 + "\", \"score\": " + points2 + ",  \"is_playing\": false}}";
+        return "{\"player1\": {\"name\": \"" + player_name1 + "\", \"score\": " + points1 + ", \"is_playing\": " +  (player1 == currentPlayer) + "}, \"player2\": {\"name\": \"" + player_name2 + "\", \"score\": " + points2 + ",  \"is_playing\": " + (player2==currentPlayer) + "}}";
     }
 
     class GameStateUpdater implements Runnable

@@ -20,9 +20,6 @@
 
                 display: inline-block;
             }
-            #vs {
-                display: inline-block;
-            }
             #players {
                 font-size: 30pt;
                 font-weight: bold;
@@ -31,10 +28,16 @@
             }
             .player {
                 width: 30%;
-                display: inline-block;
+                display: inline-table;
+            }
+            .vs {
+                display: inline-table;
             }
             .player_name {
 
+            }
+            .placeholder {
+                visibility: hidden;
             }
         </style>
     </head>
@@ -57,7 +60,10 @@
                     <img src="https://loremflickr.com//200/320/?iaoisa1" />
                     <p id="player1_name" class="player_name"></p>
                 </div>
-                <p id="vs">vs.</p>
+                <div class="vs">
+                    <img src="placeholder.jpg" class="placeholder"/>
+                    <p id="vs">vs.</p>
+                </div>
                 <div class="player">
                     <img src="https://loremflickr.com//200/320/?anfini2" />
                     <p id="player2_name" class="player_name"></p>

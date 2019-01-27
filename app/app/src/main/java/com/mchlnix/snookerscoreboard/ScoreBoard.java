@@ -41,8 +41,13 @@ public class ScoreBoard extends AppCompatActivity implements NumberPicker.OnValu
 
         ((Spinner) findViewById(R.id.spinner_player1)).setOnItemSelectedListener(this);
         ((Spinner) findViewById(R.id.spinner_player2)).setOnItemSelectedListener(this);
+
         ((NumberPicker) findViewById(R.id.score_picker1)).setOnValueChangedListener(this);
         ((NumberPicker) findViewById(R.id.score_picker2)).setOnValueChangedListener(this);
+
+        ((NumberPicker) findViewById(R.id.break_picker1)).setOnValueChangedListener(this);
+        ((NumberPicker) findViewById(R.id.break_picker2)).setOnValueChangedListener(this);
+
         ((EditText) findViewById(R.id.break_limit)).addTextChangedListener(this);
 
         this.highlightPlayer(currentPlayer);
@@ -80,6 +85,12 @@ public class ScoreBoard extends AppCompatActivity implements NumberPicker.OnValu
         int p1_points = score_picker1.getValue();
         int p2_points = score_picker2.getValue();
 
+        NumberPicker break_picker1 = findViewById(R.id.break_picker1);
+        NumberPicker break_picker2 = findViewById(R.id.break_picker2);
+
+        int p1_breaks = break_picker1.getValue();
+        int p2_breaks = break_picker2.getValue();
+
         JSONObject p1_json = new JSONObject();
         JSONObject p2_json = new JSONObject();
 
@@ -88,12 +99,12 @@ public class ScoreBoard extends AppCompatActivity implements NumberPicker.OnValu
         try {
             p1_json.put("name", p1_name);
             p1_json.put("score", p1_points);
-            p1_json.put("breaks", 0);
+            p1_json.put("breaks", p1_breaks);
             p1_json.put("is_playing", currentPlayer == player1);
 
             p2_json.put("name", p2_name);
             p2_json.put("score", p2_points);
-            p2_json.put("breaks", 0);
+            p2_json.put("breaks", p2_breaks);
             p2_json.put("is_playing", currentPlayer == player2);
 
             game.put("breaks", this.breakLimit);
@@ -143,6 +154,9 @@ public class ScoreBoard extends AppCompatActivity implements NumberPicker.OnValu
 
     private void setBreakLimit(int limit)
     {
+        ((NumberPicker) findViewById(R.id.break_picker1)).setMaxValue(limit);
+        ((NumberPicker) findViewById(R.id.break_picker2)).setMaxValue(limit);
+
         this.breakLimit = limit;
         this.updater.makeDirty();
     }

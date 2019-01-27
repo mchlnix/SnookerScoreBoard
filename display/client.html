@@ -21,6 +21,7 @@
                 display: inline-block;
             }
             #players {
+                padding-top: 20px;
                 font-size: 30pt;
                 font-weight: bold;
                 font-family: sans;
@@ -39,6 +40,10 @@
             .placeholder {
                 visibility: hidden;
             }
+            .player img {
+                border: 0px red solid;
+                transition: border-width 2s;
+            }
         </style>
     </head>
     <body>
@@ -46,17 +51,39 @@
             var ws = new WebSocket("ws://127.0.0.1:8000/")
 
             ws.onmessage = function (event) {
+
+                p1_name = document.getElementById("player1_name")
+                p2_name = document.getElementById("player2_name")
+
+                p1_image = document.getElementById("player1").children[0]
+                p2_image = document.getElementById("player2").children[0]
+
+                score = document.getElementById("score")
+
                 game = JSON.parse(event.data);
 
-                document.getElementById("player1_name").innerHTML = game.player1.name;
-                document.getElementById("player2_name").innerHTML = game.player2.name;
-                document.getElementById("score").innerHTML = game.player1.score + ":" + game.player2.score;
+                /* setup done */
+
+                p1_name.innerHTML = game.player1.name;
+                p2_name.innerHTML = game.player2.name;
+                score.innerHTML = game.player1.score + ":" + game.player2.score;
+
+                if (game.player1.is_playing)
+                {
+                    p1_image.style.borderWidth = "5px";
+                    p2_image.style.borderWidth = "0px";
+                }
+                else
+                {
+                    p1_image.style.borderWidth = "5px";
+                    p2_image.style.borderWidth = "0px";
+                }
             };
         </script>
 
         <div id="scoreboard">
             <div id="players">
-                <div class="player">
+                <div id="player1" class="player">
                     <img src="https://loremflickr.com//200/320/?iaoisa1" />
                     <p id="player1_name" class="player_name"></p>
                 </div>
@@ -64,7 +91,7 @@
                     <img src="placeholder.jpg" class="placeholder"/>
                     <p id="vs">vs.</p>
                 </div>
-                <div class="player">
+                <div id="player2" class="player">
                     <img src="https://loremflickr.com//200/320/?anfini2" />
                     <p id="player2_name" class="player_name"></p>
                 </div>

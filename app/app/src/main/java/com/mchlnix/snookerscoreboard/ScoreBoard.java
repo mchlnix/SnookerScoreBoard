@@ -4,8 +4,11 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
@@ -19,13 +22,15 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-public class ScoreBoard extends AppCompatActivity implements NumberPicker.OnValueChangeListener, AdapterView.OnItemSelectedListener {
+public class ScoreBoard extends AppCompatActivity implements NumberPicker.OnValueChangeListener, AdapterView.OnItemSelectedListener, TextWatcher {
     boolean foulMode = false;
     int player1 = R.id.avatar_player1;
     int player2 = R.id.avatar_player2;
 
     int currentPlayer = player1;
     int waitingPlayer = player2;
+
+    int breakLimit = 0;
 
     private GameStateUpdater updater;
 
@@ -38,6 +43,7 @@ public class ScoreBoard extends AppCompatActivity implements NumberPicker.OnValu
         ((Spinner) findViewById(R.id.spinner_player2)).setOnItemSelectedListener(this);
         ((NumberPicker) findViewById(R.id.score_picker1)).setOnValueChangedListener(this);
         ((NumberPicker) findViewById(R.id.score_picker2)).setOnValueChangedListener(this);
+        ((EditText) findViewById(R.id.break_limit)).addTextChangedListener(this);
 
         this.highlightPlayer(currentPlayer);
 
@@ -90,7 +96,7 @@ public class ScoreBoard extends AppCompatActivity implements NumberPicker.OnValu
             p2_json.put("breaks", 0);
             p2_json.put("is_playing", currentPlayer == player2);
 
-            game.put("breaks", 17);
+            game.put("breaks", this.breakLimit);
             game.put("player1", p1_json);
             game.put("player2", p2_json);
         } catch (JSONException e) {
@@ -112,6 +118,32 @@ public class ScoreBoard extends AppCompatActivity implements NumberPicker.OnValu
 
     @Override
     public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+        this.updater.makeDirty();
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        String breaks = editable.toString();
+
+        if (breaks.length() == 0)
+            this.setBreakLimit(0);
+        else
+            this.setBreakLimit(Integer.parseInt(breaks));
+    }
+
+    private void setBreakLimit(int limit)
+    {
+        this.breakLimit = limit;
         this.updater.makeDirty();
     }
 

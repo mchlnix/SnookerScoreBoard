@@ -21,11 +21,14 @@ public class ScoreBoard extends AppCompatActivity {
     int player2 = R.id.avatar_player2;
 
     int currentPlayer = player1;
+    int waitingPlayer = player2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_board);
+
+        this.highlightPlayer(currentPlayer);
 
         NumberPicker numberPicker = findViewById(R.id.score_picker1);
 
@@ -94,12 +97,26 @@ public class ScoreBoard extends AppCompatActivity {
 
     public void scoreBall(View v)
     {
-        NumberPicker score;
+        // todo prettify
+        NumberPicker score_player1 = findViewById(R.id.score_picker1);
+        NumberPicker score_player2 = findViewById(R.id.score_picker2);
+
+        NumberPicker score_current, score_waiting, score;
+
+        if (currentPlayer == player1) {
+            score_current = score_player1;
+            score_waiting = score_player2;
+        }
+        else
+        {
+            score_current = score_player2;
+            score_waiting = score_player1;
+        }
 
         if (this.foulMode)
-            score = findViewById(R.id.score_picker2);
+            score = score_waiting;
         else
-            score = findViewById(R.id.score_picker1);
+            score = score_current;
 
         this.setFoulMode(false);
 
@@ -162,16 +179,19 @@ public class ScoreBoard extends AppCompatActivity {
 
     public void setCurrentPlayer(View v)
     {
-        unhighlightPlayer(currentPlayer);
+        if (currentPlayer == v.getId())
+            return;
 
+        this.waitingPlayer = currentPlayer;
         this.currentPlayer = v.getId();
 
+        unhighlightPlayer(waitingPlayer);
         highlightPlayer(currentPlayer);
     }
 
     private void highlightPlayer(int id)
     {
-        ImageView avatar = findViewById(currentPlayer);
+        ImageView avatar = findViewById(id);
 
         avatar.setColorFilter(Color.argb(0x40, 0x00, 0x80, 0xFF));
     }

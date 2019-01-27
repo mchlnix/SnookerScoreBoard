@@ -42,7 +42,10 @@
             }
             .player img {
                 border: 0px red solid;
-                transition: border-width 2s;
+                margin: 10px;
+
+                transition: margin 1s ease-out,
+                            border-width 1s ease-out;
             }
         </style>
     </head>
@@ -68,15 +71,24 @@
                 p2_name.innerHTML = game.player2.name;
                 score.innerHTML = game.player1.score + ":" + game.player2.score;
 
+                end_value = "10px";
+                start_value = "0px";
+
                 if (game.player1.is_playing)
                 {
-                    p1_image.style.borderWidth = "5px";
-                    p2_image.style.borderWidth = "0px";
+                    p1_image.style.borderWidth = end_value;
+                    p1_image.style.margin = start_value;
+
+                    p2_image.style.borderWidth = start_value;
+                    p2_image.style.margin = end_value;
                 }
                 else
                 {
-                    p1_image.style.borderWidth = "5px";
-                    p2_image.style.borderWidth = "0px";
+                    p1_image.style.borderWidth = start_value;
+                    p1_image.style.margin = end_value;
+
+                    p2_image.style.borderWidth = end_value;
+                    p2_image.style.margin = start_value;
                 }
             };
         </script>

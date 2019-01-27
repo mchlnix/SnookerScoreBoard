@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -52,16 +55,39 @@ public class ScoreBoard extends AppCompatActivity {
         Spinner spinner_player1 = findViewById(R.id.spinner_player1);
         Spinner spinner_player2 = findViewById(R.id.spinner_player2);
 
-        String player_name1 = spinner_player1.getSelectedItem().toString();
-        String player_name2 = spinner_player2.getSelectedItem().toString();
+        String p1_name = spinner_player1.getSelectedItem().toString();
+        String p2_name = spinner_player2.getSelectedItem().toString();
 
         NumberPicker score_picker1 = findViewById(R.id.score_picker1);
         NumberPicker score_picker2 = findViewById(R.id.score_picker2);
 
-        int points1 = score_picker1.getValue();
-        int points2 = score_picker2.getValue();
+        int p1_points = score_picker1.getValue();
+        int p2_points = score_picker2.getValue();
 
-        return "{\"player1\": {\"name\": \"" + player_name1 + "\", \"score\": " + points1 + ", \"is_playing\": " +  (player1 == currentPlayer) + "}, \"player2\": {\"name\": \"" + player_name2 + "\", \"score\": " + points2 + ",  \"is_playing\": " + (player2==currentPlayer) + "}}";
+        JSONObject p1_json = new JSONObject();
+        JSONObject p2_json = new JSONObject();
+
+        JSONObject game = new JSONObject();
+
+        try {
+            p1_json.put("name", p1_name);
+            p1_json.put("score", p1_points);
+            p1_json.put("breaks", 0);
+            p1_json.put("is_playing", currentPlayer == player1);
+
+            p2_json.put("name", p2_name);
+            p2_json.put("score", p2_points);
+            p2_json.put("breaks", 0);
+            p2_json.put("is_playing", currentPlayer == player2);
+
+            game.put("breaks", 17);
+            game.put("player1", p1_json);
+            game.put("player2", p2_json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return game.toString();
     }
 
     class GameStateUpdater implements Runnable

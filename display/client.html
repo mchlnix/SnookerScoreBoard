@@ -62,6 +62,7 @@
                 p2_image = document.getElementById("player2").children[0]
 
                 score = document.getElementById("score")
+                breaks = document.getElementById("vs")
 
                 game = JSON.parse(event.data);
 
@@ -70,6 +71,7 @@
                 p1_name.innerHTML = game.player1.name;
                 p2_name.innerHTML = game.player2.name;
                 score.innerHTML = game.player1.score + ":" + game.player2.score;
+                breaks.innerHTML = game.player1.breaks + " (" + game.breaks + ") " + game.player2.breaks
 
                 end_value = "10px";
                 start_value = "0px";

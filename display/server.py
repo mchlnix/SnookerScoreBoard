@@ -10,13 +10,15 @@ import websockets as websockets
 class Player:
     name: str = ""
     score: int = 0
+    breaks: int = 0
     is_playing: bool = False
 
 
 @dataclass
 class Game:
-    player1: Player
-    player2: Player
+    breaks: int = 0
+    player1: Player = Player()
+    player2: Player = Player()
 
 
 class GameEncoder(JSONEncoder):
@@ -31,7 +33,7 @@ class GameDecoder(JSONDecoder):
     def decode(self, s, _w=WHITESPACE.match):
         inner_dict = super().decode(s, _w)
 
-        game = Game(Player(), Player())
+        game = Game()
         game.player1.__dict__ = inner_dict["player1"]
         game.player2.__dict__ = inner_dict["player2"]
 

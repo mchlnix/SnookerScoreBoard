@@ -47,7 +47,7 @@ async def main(websocket, _):
         if STATE_DIRTY:
             await websocket.send(dumps(GAME_STATE, cls=GameEncoder))
             STATE_DIRTY = False
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.1)
 
 
 async def handle_echo(reader, _):
@@ -90,7 +90,7 @@ if __name__ == "__main__":
 
     # from_app = open_socket(app_address)
 
-    GAME_STATE = Game(Player("Ronnie O'Sullivan", 45), Player("John Higgins", 23))
+    GAME_STATE = Game(0, Player("Ronnie O'Sullivan", 45), Player("John Higgins", 23))
     STATE_DIRTY = True
 
     loop = asyncio.get_event_loop()

@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
@@ -18,7 +19,7 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-public class ScoreBoard extends AppCompatActivity {
+public class ScoreBoard extends AppCompatActivity implements NumberPicker.OnValueChangeListener, AdapterView.OnItemSelectedListener {
     boolean foulMode = false;
     int player1 = R.id.avatar_player1;
     int player2 = R.id.avatar_player2;
@@ -26,10 +27,17 @@ public class ScoreBoard extends AppCompatActivity {
     int currentPlayer = player1;
     int waitingPlayer = player2;
 
+    private GameStateUpdater updater;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_board);
+
+        ((Spinner) findViewById(R.id.spinner_player1)).setOnItemSelectedListener(this);
+        ((Spinner) findViewById(R.id.spinner_player2)).setOnItemSelectedListener(this);
+        ((NumberPicker) findViewById(R.id.score_picker1)).setOnValueChangedListener(this);
+        ((NumberPicker) findViewById(R.id.score_picker2)).setOnValueChangedListener(this);
 
         this.highlightPlayer(currentPlayer);
 
@@ -45,7 +53,9 @@ public class ScoreBoard extends AppCompatActivity {
         numberPicker.setValue(0);
         numberPicker.setMaxValue(147);
 
-        Thread thread = new Thread(new GameStateUpdater(), "Gamestate update thread");
+        this.updater = new GameStateUpdater();
+
+        Thread thread = new Thread(this.updater, "Gamestate update thread");
 
         thread.start();
     }
@@ -90,8 +100,25 @@ public class ScoreBoard extends AppCompatActivity {
         return game.toString();
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        this.updater.makeDirty();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        this.updater.makeDirty();
+    }
+
+    @Override
+    public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+        this.updater.makeDirty();
+    }
+
     class GameStateUpdater implements Runnable
     {
+        private boolean dirty = true;
+
         @Override
         public void run() {
             try {
@@ -99,17 +126,21 @@ public class ScoreBoard extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
                     while (true) {
-                        String state = getGameState();
-                        byte[] stateBytes = state.getBytes(StandardCharsets.UTF_8);
+                        if (this.dirty) {
+                            String state = getGameState();
+                            byte[] stateBytes = state.getBytes(StandardCharsets.UTF_8);
 
-                        ByteBuffer payload = ByteBuffer.allocate(stateBytes.length + 4);
-                        payload.putInt(stateBytes.length);
-                        payload.put(stateBytes);
+                            ByteBuffer payload = ByteBuffer.allocate(stateBytes.length + 4);
+                            payload.putInt(stateBytes.length);
+                            payload.put(stateBytes);
 
-                        socket.getOutputStream().write(payload.array());
+                            socket.getOutputStream().write(payload.array());
+
+                            this.dirty = false;
+                        }
 
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(200);
                         } catch (InterruptedException e) {
                             break;
                         }
@@ -118,6 +149,11 @@ public class ScoreBoard extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        public void makeDirty()
+        {
+            this.dirty = true;
         }
     }
 
@@ -180,6 +216,8 @@ public class ScoreBoard extends AppCompatActivity {
         }
 
         score.setValue(score.getValue() + points);
+
+        this.updater.makeDirty();
     }
 
     public void whiteBall(View view)
@@ -213,6 +251,8 @@ public class ScoreBoard extends AppCompatActivity {
 
         unhighlightPlayer(waitingPlayer);
         highlightPlayer(currentPlayer);
+
+        this.updater.makeDirty();
     }
 
     private void highlightPlayer(int id)

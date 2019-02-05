@@ -1,5 +1,6 @@
 package com.mchlnix.snookerscoreboard;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ public class ScoreBoard extends AppCompatActivity implements NumberPicker.OnValu
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_score_board);
 
         ((Spinner) findViewById(R.id.spinner_player1)).setOnItemSelectedListener(this);
